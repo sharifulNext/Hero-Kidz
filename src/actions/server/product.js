@@ -7,19 +7,18 @@ export const getProducts = async () => {
   const collection = await dbConnect(collections.PRODUCTS);
   const products = await collection.find().toArray();
 
-  return JSON.parse(JSON.stringify(products)); // important for Next.js
+  // Ensure safe serialization for Next.js
+  return JSON.parse(JSON.stringify(products));
 };
 
 export const getSingleProduct = async (id) => {
-  if (!id || id.length !== 24) return null;
+  if (id.length !== 24) {
+    return {};
+  }
 
+  const query = { _id: new ObjectId(id) };
   const collection = await dbConnect(collections.PRODUCTS);
+  const product = await collection.findOne(query);
 
-  const product = await collection.findOne({
-    _id: new ObjectId(id),
-  });
-
-  if (!product) return null;
-
-  return JSON.parse(JSON.stringify(product));
+  return product ? { ...product, _id: product._id.toString() } : {};
 };

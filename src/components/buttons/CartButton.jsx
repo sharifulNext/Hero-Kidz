@@ -55,6 +55,7 @@ const CartButton = ({ product }) => {
     >
       <FaCartPlus />
       {/* {isLoading ? "Adding..." : "Add to Cart"} */}
+      Add To Cart
     </button>
   );
 };

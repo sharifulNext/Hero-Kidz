@@ -26,7 +26,7 @@ export const metadata = {
     siteName: "Hero Kidz",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/assets/hero.png",
         width: 1200,
         height: 630,
         alt: "Hero Kidz Preview Image",
