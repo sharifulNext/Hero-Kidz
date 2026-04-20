@@ -1,48 +1,64 @@
-"use server"
-
-import { collections, dbConnect } from "@/lib/dbConnect"
-import bcrypt from "bcryptjs"
+"use server";
+import { collections, dbConnect } from "@/lib/dbConnect";
+import bcrypt from "bcryptjs";
 
 export const postUser = async (payload) => {
-    const { email, password, name } = payload
+  const { email, password, name } = payload;
+  if (!email || !password) {
+    return { success: false, message: "Email and password are required" };
+  }
+
+  try {
     
-    // Check payload
-    if (!email || !password) return null
+    const userCollection = await dbConnect(collections.USERS);
 
-    try {
-        // Step 1: Get the collection reference (Awaiting the connection)
-        const userCollection = await dbConnect(collections.USERS);
-
-        // Step 2: Check if user exists
-        const isExist = await userCollection.findOne({ email });
-        
-        if (isExist) {
-            return { error: "User already exists" }; // Returning an object is better than null
-        }
-
-        // Step 3: Create user object with hashed password
-        const newUser = {
-            providerId: "credentials",
-            name,
-            email,
-            password: await bcrypt.hash(password, 14),
-            role: "user",
-            createdAt: new Date(), // Always add timestamps
-        };
-
-        // Step 4: Insert user
-        const result = await userCollection.insertOne(newUser);
-        
-        if (result.acknowledged) {
-            return {
-                acknowledged: true,
-                insertedId: result.insertedId.toString()
-            };
-        }
-        
-        return { error: "Failed to insert user" };
-    } catch (error) {
-        console.error("Database Error:", error);
-        throw new Error("Internal Server Error");
+    const isExist = await userCollection.findOne({ email });
+    
+    if (isExist) {
+      return { success: false, exists: true };
     }
-}
+
+    const newUser = {
+      provider: "credentials",
+      name,
+      email,
+      password: await bcrypt.hash(password, 14),
+      role: "user",
+      createdAt: new Date(),
+    };
+
+    const result = await userCollection.insertOne(newUser);
+    
+    return {
+      success: true,
+      acknowledged: result.acknowledged,
+      insertedId: result.insertedId?.toString(),
+    };
+  } catch (error) {
+    console.error("Database Error:", error);
+    return { success: false, message: "Database connection failed" };
+  }
+};
+
+export const loginUser = async (payload) => {
+  const { email, password } = payload;
+  if (!email || !password) return null;
+
+  try {
+    const userCollection = await dbConnect(collections.USERS);
+    const user = await userCollection.findOne({ email });
+
+    if (!user) return null;
+
+    const isMatched = await bcrypt.compare(password, user?.password);
+    
+    if (isMatched) {
+      const { password: _, ...userData } = user;
+      return { ...userData, _id: user._id.toString() };
+    }
+    return null;
+  } catch (error) {
+    console.error("Login Error:", error);
+    return null;
+  }
+};
