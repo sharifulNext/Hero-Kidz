@@ -28,13 +28,13 @@ export const RegisterForm = () => {
     setLoading(true);
 
     if (!form.email.endsWith("gmail.com")) {
-      Swal.fire("We only Accept Gmail", "Gmail একাউণ্ট ব্যবহার করুন", "error");
+      Swal.fire("We only Accept Gmail", "Please use a Gmail account to register", "error");
       setLoading(false);
       return;
     }
 
     if (form.password.length < 6) {
-      Swal.fire("Week Password", "Stong পাসওয়ার্ড দিন", "error");
+      Swal.fire("Week Password", "Please use at least 6 characters", "error");
       setLoading(false);
       return;
     }
@@ -53,7 +53,7 @@ export const RegisterForm = () => {
       }
       setLoading(false);
     } else {
-      Swal.fire("error", "এই gmail এ  একটি একাউন্ট আছে । লগিন করুন ", "error");
+      Swal.fire("error", "An account with this email already exists. Please log in ", "error");
       setLoading(false);
     }
   };

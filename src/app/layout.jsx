@@ -2,10 +2,12 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
+import swap from "daisyui/components/swap";
 
 const poppins = Poppins({
   subsets: ["latin"], 
   weight: ["100", "200", "400", "500", "600", "800"],
+  display:"swap",
 });
 
 // Full Metadata Configuration
