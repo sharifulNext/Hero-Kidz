@@ -4,9 +4,9 @@ import React from "react";
 const Loading = () => {
   return (
     <div className="flex flex-col min-h-screen justify-center items-center bg-slate-50/50">
-      {/* Container for Logo with subtle pulse and scale */}
+
       <div className="relative flex items-center justify-center mb-8">
-        {/* Outer Ring Animation */}
+        
         <div className="absolute h-24 w-24 rounded-full border-t-2 border-b-2 border-blue-500 animate-spin"></div>
         
         {/* Logo with a smooth breathing effect */}
