@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaStar, FaShoppingCart, FaEye } from "react-icons/fa";
+import CartButton from "../buttons/CartButton";
 
 const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
   const {
@@ -82,13 +83,7 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
           </Link>
 
           {/* Add to Cart */}
-          <button
-            onClick={() => onAddToCart?.(product)}
-            className="w-1/2 flex items-center justify-center gap-1 bg-primary text-white py-2 rounded-lg text-sm hover:opacity-90 transition"
-          >
-            <FaShoppingCart />
-            Cart
-          </button>
+          <CartButton product={product}></CartButton>
         </div>
       </div>
     </div>
