@@ -38,5 +38,6 @@ export async function dbConnect(collectionName) {
 // export collections properly
 export const collections = {
   PRODUCTS: "products",
-  USERS:"users"
+  USERS:"users",
+  CART:"cart"
 };
